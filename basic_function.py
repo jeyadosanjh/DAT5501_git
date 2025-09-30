@@ -1,5 +1,5 @@
 def increment(x):
-    return x + 1
+    return x + 2
 
 #REQUIREMENTS
 # 1. Should return the input value incremented by 1
