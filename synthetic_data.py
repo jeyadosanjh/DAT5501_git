@@ -16,11 +16,18 @@ def generate_synthetic_data():
     return data
 
 def plot_data(data):
-    plt.scatter(data['x'], data['y'], alpha=0.5)
-    plt.title('Synthetic Data')
+    # Read data from CSV file
+    data = pd.read_csv("synthetic_data.csv")
+    plt.scatter(data['x'], data['y'], alpha=0.5, label='Data')
+    # Fit a best fit line
+    coeffs = np.polyfit(data['x'], data['y'], 1)
+    fit_y = np.polyval(coeffs, data['x'])
+    plt.plot(data['x'], fit_y, color='red', label=f'Fit: y={coeffs[0]:.2f}x+{coeffs[1]:.2f}')
+    plt.title('Synthetic Data with Fitted Line')
     plt.xlabel('X-axis')
     plt.ylabel('Y-axis')
-    plt.show()  
+    plt.legend()
+    plt.show()
 
 if __name__ == "__main__":
     data = generate_synthetic_data()
