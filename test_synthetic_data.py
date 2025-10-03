@@ -3,8 +3,11 @@ import pandas as pd
 import numpy as np
 from synthetic_data import generate_synthetic_data
 
+
 class TestSyntheticData(unittest.TestCase):
     def test_synthetic_data_generation(self):
+        data = generate_synthetic_data()
+
         # Check if there are no non-numeric values
         self.assertTrue(pd.api.types.is_numeric_dtype(data['x']))
         self.assertTrue(pd.api.types.is_numeric_dtype(data['y']))
