@@ -24,5 +24,7 @@ def plot_data(data):
 
 if __name__ == "__main__":
     data = generate_synthetic_data()
+    # Save x and y values to a CSV file
+    data.to_csv("synthetic_data.csv", index=False)
     plot_data(data)
 
