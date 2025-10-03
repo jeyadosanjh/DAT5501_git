@@ -23,7 +23,10 @@ def plot_data(data):
     coeffs = np.polyfit(data['x'], data['y'], 1)
     fit_y = np.polyval(coeffs, data['x'])
     plt.plot(data['x'], fit_y, color='red', label=f'Fit: y={coeffs[0]:.2f}x+{coeffs[1]:.2f}')
-    plt.title('Synthetic Data with Fitted Line')
+    # Plot the original input line y = m*x + b
+    defined_y = m * data['x'] + b
+    plt.plot(data['x'], defined_y, color='green', linestyle='--', label=f'Original Input: y={m}x+{b}')
+    plt.title('Synthetic Data with Fitted and Defined Line')
     plt.xlabel('X-axis')
     plt.ylabel('Y-axis')
     plt.legend()
