@@ -30,6 +30,8 @@ def plot_data(data):
     plt.xlabel('X-axis')
     plt.ylabel('Y-axis')
     plt.legend()
+    # Save the plot to a file
+    plt.savefig("synthetic_plot.png")
     plt.show()
 
 if __name__ == "__main__":
