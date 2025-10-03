@@ -12,8 +12,8 @@ class TestSyntheticData(unittest.TestCase):
         # Check if the slope and intercept are close to the defined values
         coeffs = np.polyfit(data['x'], data['y'], 1)
         measured_m, measured_b = coeffs
-        self.assertAlmostEqual(measured_m, 4.7, delta=10)
-        self.assertAlmostEqual(measured_b, 0.3, delta=10)
+        self.assertAlmostEqual(measured_m, 4.7, delta=0.5)
+        self.assertAlmostEqual(measured_b, 0.3, delta=0.5)
 
 if __name__ == '__main__':
     unittest.main()
