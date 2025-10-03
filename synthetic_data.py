@@ -40,3 +40,9 @@ if __name__ == "__main__":
     data.to_csv("synthetic_data.csv", index=False)
     plot_data(data)
 
+## REQUIREMENTS
+# 1. Should generate synthetic data based on a linear equation with noise
+# 2. Should save the generated data to a CSV file
+# 3. Should read the data from the CSV file for plotting
+# 4. There is no non-numeric data in the CSV file
+# 5. The measured slope and intercept should be close to the input values (m and b)
