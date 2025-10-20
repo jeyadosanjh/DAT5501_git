@@ -32,6 +32,12 @@ def plot_cocacola_percent_change():
     plt.savefig("cocacola_percent_change.png")
     plt.show()
 
+#calculating standard deviation of percent daily changes
+def calculate_std_dev_percent_change():
+    std_dev = df['Percent Change'].std()
+    print(f"Standard Deviation of Daily Percent Changes: {std_dev:.2f}%")
+
 if __name__ == "__main__":
     plot_cocacola_data()
     plot_cocacola_percent_change()
+    calculate_std_dev_percent_change()
