@@ -3,13 +3,13 @@ import datetime
 import pandas as pd
 
 def past_days_csv():
-    df = pd.read_csv('random_dates.csv') #read the random dates CSV file
+    df = pd.read_csv('random_dates.csv', header=None, names=['date'])  # read CSV
     for x in df['date']:
-        date_convert = np.datetime64(x, 'D') #convert to numpy datetime64 object
-        today = np.datetime64('today', 'D') #get today's date in YYYY-MM-DD format
-        difference = today - date_convert #calculate difference in days
-        days_difference = difference.astype(int) #convert to integer
-        print(f"Date: {x}, Days from today: {days_difference}") #print the difference
+        date_convert = np.datetime64(x, 'D')  # convert to numpy datetime64 object
+        today = np.datetime64('today', 'D')  # get today's date in YYYY-MM-DD format
+        difference = today - date_convert  # calculate difference in days
+        days_difference = difference.astype(int)  # convert to integer
+        print(f"Date: {x}, Days from today: {days_difference}")  # print the difference
 
 
 def difference_in_days(user_date):
