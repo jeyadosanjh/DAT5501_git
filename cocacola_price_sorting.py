@@ -4,9 +4,11 @@ import numpy as np
 import time
 import matplotlib.pyplot as plt
 
+#change in P= Pn+1 - Pn
+#Hypothesis: The measured sorting time for T(n) should scale approximately as n log n
 
-
-#Change in P= Pn+1 - Pn
+#Results: The measures sorting time T(n) does scale approximately as n log n, confirming the hypothesis.
+#Minor deviations at small n arise from timing resolution and system noise
 
 #sorting closing prices and measuring time taken
 def sort_cocacola_prices():
@@ -21,7 +23,7 @@ def sort_cocacola_prices():
     return sorted_prices
 
 
-# For n = 7..365, time how long it takes to sort the first n daily changes
+# For n = 7->365, time how long it takes to sort the first n daily changes
 def time_sort_daily_changes():
     prices = df['Close/Last'].values
     # daily change P_{n+1} - P_n
