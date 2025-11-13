@@ -139,6 +139,9 @@ if __name__ == '__main__':
 # As the polynomial degree increases, the predicted values for future sea levels becomes more extreme and less reliable
 # Therefore, lower degree polynomials provide for accurate forecasts
 
+# The x**2 per degree of freedom decreased sharply from degree 1 to 2, then levelled off.
+# This indicates that a second-order polynomial sufficiently captures the trend in global sea-level rise, 
+# while higher orders add unnecessary complexity.
 
 
 
