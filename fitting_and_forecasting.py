@@ -89,13 +89,42 @@ def plot_real_data(path='sea_level_data.csv'):
     plt.savefig('sea_level_observed_data.png')
     plt.show()
 
+# Model Testing (x**2 per degree of freedom)
+
+def chi_square_testing(path='sea_level_data.csv', max_fit_year=2010):
+    df, sea_col = load_and_prepare(path)
+
+    # subset for fitting: all years <= max_fit_year
+    df_subset = df[df['Year'] <= max_fit_year]
+    
+    x = df_subset['Year'].values
+    y = df_subset[sea_col].values
+    N0 = len(x)
+    sigma = np.std(y - np.mean(y)) * np.ones_like(y)  # assuming constant uncertainty
+
+    for order in range(1, 10):
+        coeffs = np.polyfit(df_subset['Year'], df_subset[sea_col], order)
+        fit_y_subset = np.polyval(coeffs, df_subset['Year'])
+        # Chi Square = Σ((observed - expected)^2 / uncertainty^2)
+        chi_square = np.sum(((df_subset[sea_col] - fit_y_subset) ** 2) / (sigma ** 2))
+        v = N0 - (order + 1)  # degrees of freedom
+        reduced_chi_square = chi_square / v
+        print(f'Chi-Square for degree {order}: {chi_square:.2f}, Reduced Chi-Square: {reduced_chi_square:.2f}')
+    return
+
 if __name__ == '__main__':
     fit_and_plot()
     plot_real_data()
+    chi_square_testing
 
 #RESULTS:
 # As the polynomial degree increases, the predicted values for future sea levels becomes more extreme and less reliable
 # Therefore, lower degree polynomials provide for accurate forecasts
+
+
+
+
+
 
 
 
