@@ -110,12 +110,30 @@ def chi_square_testing(path='sea_level_data.csv', max_fit_year=2010):
         v = N0 - (order + 1)  # degrees of freedom
         reduced_chi_square = chi_square / v
         print(f'Chi-Square for degree {order}: {chi_square:.2f}, Reduced Chi-Square: {reduced_chi_square:.2f}')
-    return
+
+    # plotting x**2 per degree of freedom as function of polynomial degree
+    degrees = np.arange(1, 10)
+    chi_squares = []
+    for order in degrees:
+        coeffs = np.polyfit(df_subset['Year'], df_subset[sea_col], order)
+        fit_y_subset = np.polyval(coeffs, df_subset['Year'])
+        chi_square = np.sum(((df_subset[sea_col] - fit_y_subset) ** 2) / (sigma ** 2))
+        v = N0 - (order + 1)
+        reduced_chi_square = chi_square / v
+        chi_squares.append(reduced_chi_square)
+    plt.figure()
+    plt.plot(degrees, chi_squares, marker='o')
+    plt.xlabel('Polynomial Degree')
+    plt.ylabel('Reduced Chi-Square')
+    plt.title('Reduced Chi-Square vs Polynomial Degree')
+    plt.grid(True)
+    plt.savefig('reduced_chi_square_vs_degree.png')
+    plt.show()
 
 if __name__ == '__main__':
     fit_and_plot()
     plot_real_data()
-    chi_square_testing
+    chi_square_testing()
 
 #RESULTS:
 # As the polynomial degree increases, the predicted values for future sea levels becomes more extreme and less reliable
