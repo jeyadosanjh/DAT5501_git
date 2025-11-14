@@ -45,24 +45,43 @@ def fit_and_plot(path='sea_level_data.csv', max_fit_year=2010):
     df_subset = df[df['Year'] <= max_fit_year]
 
     plt.figure(figsize=(10, 6))
-    # plot the original data
-    plt.scatter(df['Year'], df[sea_col], s=10, color='black', label='Observed')
+    # estimate observational uncertainty (sigma) from quadratic fit residuals on fit subset
+    if len(df_subset) >= 3:
+        quad_coeffs = np.polyfit(df_subset['Year'], df_subset[sea_col], 2)
+        quad_fit_subset = np.polyval(quad_coeffs, df_subset['Year'])
+        sigma = np.std(df_subset[sea_col] - quad_fit_subset)
+    else:
+        sigma = np.std(df[sea_col].values - np.mean(df[sea_col].values))
+
+    # plot the original data with uncertainty (error bars)
+    # plot observed points with light-blue markers and matching error bars
+    plt.errorbar(
+        df['Year'], df[sea_col], yerr=sigma, fmt='o', markersize=4,
+        ecolor='#ADD8E6', elinewidth=1, capsize=2,
+        color='#5DADE2', markerfacecolor='#ADD8E6', markeredgecolor='#5DADE2',
+        label='Observed ± σ'
+    )
 
     # fitting polynomials of degree 1..9
+    cmap = plt.get_cmap('tab10')
+    colors = [cmap(i % 10) for i in range(9)]
     for order in range(1, 10):
         coeffs = np.polyfit(df_subset['Year'], df_subset[sea_col], order)
         # evaluate fit on the full range for plotting
         years_full = np.arange(df['Year'].min(), 2021)
         fit_y = np.polyval(coeffs, years_full)
-        plt.plot(years_full, fit_y, label=f'Degree {order} Fit')
+        color = colors[order - 1]
+        plt.plot(years_full, fit_y, color=color, linewidth=1.8, label=f'Degree {order} Fit')
 
         # forecasting 10 years into the future (2011-2020)
-        future_years = np.arange(max_fit_year + 1, max_fit_year + 11)
-        all_years = np.concatenate((df['Year'].values, future_years))
-        # for forecast plotting evaluate on continuous future range
         future_full = np.arange(df['Year'].min(), max_fit_year + 11)
         future_fit_y = np.polyval(coeffs, future_full)
-        plt.plot(future_full, future_fit_y, '--', alpha=0.6)
+        plt.plot(future_full, future_fit_y, '--', color=color, alpha=0.7)
+
+    # mark the year where forecasting begins with a dashed vertical line
+    plt.axvline(max_fit_year, color='red', linestyle='--', linewidth=1.2, label='Forecast start')
+    # lightly shade the forecast region (next 10 years)
+    #plt.axvspan(max_fit_year + 0.01, max_fit_year + 10, color='red', alpha=0.06)
 
     plt.xlabel('Year')
     plt.ylabel(f'{sea_col}')
@@ -73,21 +92,6 @@ def fit_and_plot(path='sea_level_data.csv', max_fit_year=2010):
     plt.savefig('sea_level_fits_and_forecasts.png')
     plt.show()
 
-def plot_real_data(path='sea_level_data.csv'):
-    df, sea_col = load_and_prepare(path)
-
-    plt.figure(figsize=(10, 6))
-    # plot the original data
-    plt.scatter(df['Year'], df[sea_col], s=10, color='black', label='Observed')
-
-    plt.xlabel('Year')
-    plt.ylabel(f'{sea_col}')
-    plt.title('Observed Global Sea Level Data')
-    plt.legend()
-    plt.grid(True)
-    plt.tight_layout()
-    plt.savefig('sea_level_observed_data.png')
-    plt.show()
 
 # Model Testing (x**2 per degree of freedom)
 
@@ -132,7 +136,6 @@ def chi_square_testing(path='sea_level_data.csv', max_fit_year=2010):
 
 if __name__ == '__main__':
     fit_and_plot()
-    plot_real_data()
     chi_square_testing()
 
 #RESULTS:
