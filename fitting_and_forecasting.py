@@ -93,7 +93,7 @@ def fit_and_plot(path='sea_level_data.csv', max_fit_year=2010):
     plt.show()
 
 
-# Model Testing (x**2 per degree of freedom)
+# Model Testing (x**2 per degree of freedom) and Bayesian Information Criterion (BIC)
 
 def chi_square_testing(path='sea_level_data.csv', max_fit_year=2010):
     df, sea_col = load_and_prepare(path)
@@ -134,6 +134,26 @@ def chi_square_testing(path='sea_level_data.csv', max_fit_year=2010):
     plt.savefig('reduced_chi_square_vs_degree.png')
     plt.show()
 
+    # --- New: compute and plot BIC for each polynomial degree (keep reduced chi-square exactly the same) ---
+    bics = []
+    eps = 1e-12
+    for order in degrees:
+        coeffs = np.polyfit(df_subset['Year'], df_subset[sea_col], order)
+        fit_y_subset = np.polyval(coeffs, df_subset['Year'])
+        rss = np.sum((df_subset[sea_col] - fit_y_subset) ** 2)
+        k = order + 1  # number of fitted parameters
+        bic = N0 * np.log(rss / N0 + eps) + k * np.log(N0)
+        bics.append(bic)
+
+    plt.figure()
+    plt.plot(degrees, bics, marker='o', color='tab:purple')
+    plt.xlabel('Polynomial Degree')
+    plt.ylabel('BIC')
+    plt.title('Bayesian Information Criterion (BIC) vs Polynomial Degree')
+    plt.grid(True)
+    plt.savefig('bic_vs_degree.png')
+    plt.show()
+
 if __name__ == '__main__':
     fit_and_plot()
     chi_square_testing()
@@ -145,6 +165,11 @@ if __name__ == '__main__':
 # The x**2 per degree of freedom decreased sharply from degree 1 to 2, then levelled off.
 # This indicates that a second-order polynomial sufficiently captures the trend in global sea-level rise, 
 # while higher orders add unnecessary complexity.
+
+# Comparing BIC to Chi-Square
+# The plot of BIC and Chi-Square vs Polynomial are similar in shape, both indicating degree 2 as optimal.
+# Which model is best:
+# Both BIC and reduced Chi-Square suggest that a polynomial of degree 2 is the best balance between fit quality and model simplicity.
 
 
 
