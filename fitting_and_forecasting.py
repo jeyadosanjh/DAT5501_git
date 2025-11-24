@@ -134,7 +134,7 @@ def chi_square_testing(path='sea_level_data.csv', max_fit_year=2010):
     plt.savefig('reduced_chi_square_vs_degree.png')
     plt.show()
 
-    # --- New: compute and plot BIC for each polynomial degree (keep reduced chi-square exactly the same) ---
+    # compute and plot BIC for each polynomial degree
     bics = []
     eps = 1e-12
     for order in degrees:
@@ -152,6 +152,48 @@ def chi_square_testing(path='sea_level_data.csv', max_fit_year=2010):
     plt.title('Bayesian Information Criterion (BIC) vs Polynomial Degree')
     plt.grid(True)
     plt.savefig('bic_vs_degree.png')
+    plt.show()
+
+    # Use the second-order polynomial as the chosen model (per analysis) for best fit
+    best_order = 2
+
+    # estimate a scalar sigma for plotting uncertainties (use quadratic residuals on fit subset if possible)
+    if len(df_subset) >= 3:
+        quad_coeffs = np.polyfit(df_subset['Year'], df_subset[sea_col], 2)
+        quad_fit_subset = np.polyval(quad_coeffs, df_subset['Year'])
+        sigma_plot = float(np.std(df_subset[sea_col] - quad_fit_subset))
+    else:
+        sigma_plot = float(np.std(df_subset[sea_col] - np.mean(df_subset[sea_col])))
+
+    # fit the best model on the fit subset (years <= max_fit_year)
+    best_coeffs = np.polyfit(df_subset['Year'], df_subset[sea_col], best_order)
+
+    plt.figure(figsize=(10, 6))
+    # plot observed data (all years) with uncertainty band (errorbars)
+    plt.errorbar(df['Year'], df[sea_col], yerr=sigma_plot, fmt='o', markersize=4,
+                 ecolor='#ADD8E6', elinewidth=1, capsize=2,
+                 color='#5DADE2', markerfacecolor='#ADD8E6', markeredgecolor='#5DADE2',
+                 label='Observed ± σ')
+
+    # plot best-fit model over the fitted range (solid) and forecast (dashed)
+    years_fit = np.arange(df_subset['Year'].min(), max_fit_year + 1)
+    fit_y = np.polyval(best_coeffs, years_fit)
+    plt.plot(years_fit, fit_y, color='tab:green', linewidth=2, label=f'Best model (degree {best_order}) fit')
+
+    years_forecast = np.arange(max_fit_year, max_fit_year + 11)
+    forecast_y = np.polyval(best_coeffs, years_forecast)
+    plt.plot(years_forecast, forecast_y, '--', color='tab:green', linewidth=1.5, label='Forecast (10 yr)')
+
+    # indicate fit limit
+    plt.axvline(max_fit_year, color='red', linestyle='--', linewidth=1.2, label='Fit limit')
+
+    plt.xlabel('Year')
+    plt.ylabel(f'{sea_col}')
+    plt.title(f'Observed data and best BIC model (degree {best_order})')
+    plt.legend()
+    plt.grid(True)
+    plt.tight_layout()
+    plt.savefig('bic_best_model.png')
     plt.show()
 
 if __name__ == '__main__':
