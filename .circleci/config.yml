@@ -11,8 +11,11 @@ jobs:
           command: pip install -r requirements.txt
       - run:
           name: Run tests
-          command: pytest test_basic_function.py test_synthetic_data.py test_duration_calc.py
-
+          command: |
+            pytest \
+              Week2_continuous_integration/test_basic_function.py \
+              Week2_continuous_integration/test_synthetic_data.py \
+              Week5_data_analysis/test_duration_calc.py
 workflows:
   version: 2
   build:
