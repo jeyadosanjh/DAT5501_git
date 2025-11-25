@@ -1,4 +1,4 @@
-#WEEK 1 VERSION CONTROL
+# WEEK 1 VERSION CONTROL
 
 ## Overview
 This week introduced Git and GitHub for version control.  
