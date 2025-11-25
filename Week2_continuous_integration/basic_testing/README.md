@@ -10,4 +10,4 @@ The aim was to run unit tests automatically on every push to GitHub, so that bro
 
 ## How to run the code
 ```bash
-python Week2_continuous_integration/basic_testing/basic_function.p
+python Week2_continuous_integration/basic_testing/basic_function.py
