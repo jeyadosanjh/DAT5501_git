@@ -6,7 +6,8 @@ I worked with a global sea level dataset and explored how different polynomial m
 ## Files in this folder
 - 'cocacola_asset_price.py' — copy of the functions that create dataset and plot the asset price against date
 - 'cocacola_price_sorting.py' - functions that calculate the daily change in price, the time it takes to sort the change in price and plots the change in time against n (7->365)
-- 'cocacola_percent_change.png' - plot of change in time against n
+- 'sort_time_vs_n.png' - plot of the sorting time of daily price changes against n
+- 'cocacola_percent_change.png' - plot of the asset percent change over time
   
 ## Results
 Hypothesis: The measured sorting time for T(n) should scale approximately as n log n
