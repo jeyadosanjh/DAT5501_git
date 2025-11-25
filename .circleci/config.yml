@@ -12,8 +12,8 @@ jobs:
       - run:
           name: Run tests
           command: |
-            pytest Week2_continuous_integration/test_basic_function.py \
-            Week2_continuous_integration/test_synthetic_data.py \
+            pytest Week2_continuous_integration/basic_testing/test_basic_function.py \
+            Week2_continuous_integration/data_pipeline_activity/test_synthetic_data.py \
             Week5_data_analysis/duration_calculator/test_duration_calc.py
 workflows:
   version: 2
