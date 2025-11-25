@@ -2,6 +2,7 @@
 ## Overview
 This week extended the data analysis techniques to include model fitting and forecasting.  
 I worked with a global sea level dataset and explored how different polynomial models fit the data and forecast future values.
+I implemented the chi-squared per degree of freedom statistic and used it to compare polynomial models of different orders.
 
 ## Files in this folder
 - 'fitting_and_forecasting.py' — functions fitting the sea level data and forecasting the last ten years using different polynomials.
